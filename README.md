@@ -6,7 +6,7 @@
 
 ## 下载
 
-前往 [Releases](https://github.com/linagent/windows-folder-black-fix/releases/latest) 下载 `文件夹黑块修复工具.exe`。
+前往 [Releases](https://github.com/linagent/windows-folder-black-fix/releases/latest) 下载 `FolderBlackFix-v1.0.0-win-x64.exe`。
 
 这是 Windows 10/11 64 位单文件版，已包含 .NET 8 运行环境，无需安装。EXE 没有商业代码签名证书；下载后可用 Release 中的 `SHA256.txt` 校验完整性。
 
