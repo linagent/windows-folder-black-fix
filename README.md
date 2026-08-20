@@ -6,7 +6,7 @@
 
 ## 下载
 
-前往 [Releases](https://github.com/linagent/windows-folder-black-fix/releases/latest) 下载 `FolderBlackFix-v1.0.0-win-x64.exe`。
+前往 [Releases](https://github.com/linagent/windows-folder-black-fix/releases/latest) 下载 `FolderBlackFix-v2.0.0-win-x64.exe`。
 
 这是 Windows 10/11 64 位单文件版，已包含 .NET 8 运行环境，无需安装。EXE 没有商业代码签名证书；下载后可用 Release 中的 `SHA256.txt` 校验完整性。
 
@@ -17,6 +17,13 @@
 3. 文件夹窗口短暂消失并恢复后，重新打开原文件夹查看。
 
 没有需要配置的选项，也不会重启电脑。
+
+## 2.0 更新
+
+- 重做高 DPI 布局：标题、副标题、拖放提示和按钮都按实际字体高度自动排列。
+- 修复 175% 系统缩放下文字重叠、按钮裁切和圆角外露问题。
+- 主按钮改为完全自绘控件，避免 Windows 原生按钮在部分缩放比例下出现黑边。
+- 增加布局契约自检，自动验证标题不重叠、选择按钮完整可见并保持居中。
 
 ## 安全设计
 

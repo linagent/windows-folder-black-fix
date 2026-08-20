@@ -38,6 +38,7 @@ internal static class Program
             };
             form.Show();
             Application.DoEvents();
+            Console.WriteLine(form.GetLayoutDiagnostics());
             using var bitmap = new Bitmap(form.Width, form.Height);
             form.DrawToBitmap(bitmap, new Rectangle(Point.Empty, form.Size));
             bitmap.Save(fullPath, System.Drawing.Imaging.ImageFormat.Png);

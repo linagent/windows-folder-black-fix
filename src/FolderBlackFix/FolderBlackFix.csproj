@@ -8,7 +8,7 @@
     <Nullable>enable</Nullable>
     <AssemblyName>文件夹黑块修复工具</AssemblyName>
     <RootNamespace>FolderBlackFix</RootNamespace>
-    <Version>1.0.0</Version>
+    <Version>2.0.0</Version>
     <Company>FolderBlackFix</Company>
     <Product>文件夹黑块修复工具</Product>
     <Description>安全修复 Windows 资源管理器文件夹缩略图或图标黑色背景问题</Description>

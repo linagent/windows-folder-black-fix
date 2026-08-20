@@ -20,6 +20,8 @@ internal sealed class MainForm : Form
     private readonly LinkLabel _detailsLink = new();
     private readonly Label _statusLabel = new();
     private readonly ProgressBar _progress = new();
+    private readonly Label _headerTitle = new();
+    private readonly Label _headerSubtitle = new();
     private bool _busy;
     private bool _finished;
 
@@ -41,30 +43,48 @@ internal sealed class MainForm : Form
     private void BuildUi()
     {
         var root = new TableLayoutPanel { Dock = DockStyle.Fill, Padding = new Padding(38, 26, 38, 18), ColumnCount = 1, RowCount = 3 };
-        root.RowStyles.Add(new RowStyle(SizeType.Absolute, 92));
+        root.RowStyles.Add(new RowStyle(SizeType.Absolute, 100));
         root.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
         root.RowStyles.Add(new RowStyle(SizeType.Absolute, 30));
         Controls.Add(root);
 
-        var header = new Panel { Dock = DockStyle.Fill };
-        var badge = new LogoBadge { Location = new Point(0, 2), Size = new Size(56, 56) };
-        var title = new Label { Text = "文件夹黑块修复", Font = new Font("Microsoft YaHei UI", 20F, FontStyle.Bold), ForeColor = Color.FromArgb(24, 36, 59), AutoSize = true, Location = new Point(72, 0) };
-        var subtitle = new Label { Text = "拖进来，点一下，恢复正常", Font = new Font("Microsoft YaHei UI", 10F), ForeColor = Color.FromArgb(104, 117, 139), AutoSize = true, Location = new Point(75, 44) };
-        header.Controls.AddRange([badge, title, subtitle]);
+        var header = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 2, RowCount = 1, Margin = Padding.Empty, Padding = Padding.Empty };
+        header.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 76));
+        header.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+        header.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+        var badge = new LogoBadge { Size = new Size(56, 56), Anchor = AnchorStyles.Left, Margin = Padding.Empty };
+        var titleStack = new TableLayoutPanel { AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, ColumnCount = 1, RowCount = 2, Anchor = AnchorStyles.Left, Margin = Padding.Empty, Padding = Padding.Empty };
+        titleStack.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        titleStack.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        titleStack.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        _headerTitle.Text = "文件夹黑块修复";
+        _headerTitle.Font = new Font("Microsoft YaHei UI", 18F, FontStyle.Bold);
+        _headerTitle.ForeColor = Color.FromArgb(24, 36, 59);
+        _headerTitle.AutoSize = true;
+        _headerTitle.Margin = Padding.Empty;
+        _headerSubtitle.Text = "拖进来，点一下，恢复正常";
+        _headerSubtitle.Font = new Font("Microsoft YaHei UI", 9.5F);
+        _headerSubtitle.ForeColor = Color.FromArgb(104, 117, 139);
+        _headerSubtitle.AutoSize = true;
+        _headerSubtitle.Margin = new Padding(2, 4, 0, 0);
+        titleStack.Controls.Add(_headerTitle, 0, 0);
+        titleStack.Controls.Add(_headerSubtitle, 0, 1);
+        header.Controls.Add(badge, 0, 0);
+        header.Controls.Add(titleStack, 1, 0);
         root.Controls.Add(header, 0, 0);
 
         var card = new RoundedPanel { Dock = DockStyle.Fill, BackColor = Color.White, Radius = 22, Padding = new Padding(28, 26, 28, 22) };
         root.Controls.Add(card, 0, 1);
         var cardLayout = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 5 };
         cardLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-        cardLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 70));
-        cardLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 34));
-        cardLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 28));
-        cardLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 36));
+        cardLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 64));
+        cardLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 32));
+        cardLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 18));
+        cardLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 32));
         card.Controls.Add(cardLayout);
 
         _dropZone.Dock = DockStyle.Fill;
-        _dropZone.Margin = new Padding(0, 0, 0, 18);
+        _dropZone.Margin = new Padding(0, 0, 0, 14);
         _dropZone.AllowDrop = true;
         _folderGlyph.Size = new Size(72, 62);
         _dropTitle.Text = "把问题文件夹拖到这里";
@@ -108,13 +128,13 @@ internal sealed class MainForm : Form
         _statusLabel.ForeColor = Color.FromArgb(119, 130, 149);
         cardLayout.Controls.Add(_statusLabel, 0, 2);
         _progress.Dock = DockStyle.Fill;
-        _progress.Margin = new Padding(0, 9, 0, 9);
+        _progress.Margin = new Padding(0, 4, 0, 4);
         _progress.Style = ProgressBarStyle.Marquee;
         _progress.MarqueeAnimationSpeed = 28;
         _progress.Visible = false;
         cardLayout.Controls.Add(_progress, 0, 3);
 
-        var links = new FlowLayoutPanel { Dock = DockStyle.Fill, FlowDirection = FlowDirection.LeftToRight, WrapContents = false, AutoSize = false, Padding = new Padding(0, 8, 0, 0) };
+        var links = new FlowLayoutPanel { Dock = DockStyle.Fill, FlowDirection = FlowDirection.LeftToRight, WrapContents = false, AutoSize = false, Padding = new Padding(0, 6, 0, 0) };
         _restoreLink.Text = "恢复上次修改";
         _backupLink.Text = "查看备份";
         _detailsLink.Text = "查看详情";
@@ -126,6 +146,23 @@ internal sealed class MainForm : Form
         cardLayout.Controls.Add(links, 0, 4);
 
         root.Controls.Add(new Label { Text = "不联网 · 不删除个人文件 · 不重启电脑", Dock = DockStyle.Fill, TextAlign = ContentAlignment.BottomCenter, ForeColor = Color.FromArgb(137, 147, 164) }, 0, 2);
+    }
+
+    protected override void OnShown(EventArgs e)
+    {
+        base.OnShown(e);
+        BeginInvoke(() =>
+        {
+            PerformLayout();
+            LayoutDropZone();
+            _dropZone.Invalidate(true);
+        });
+    }
+
+    protected override void OnDpiChanged(DpiChangedEventArgs e)
+    {
+        base.OnDpiChanged(e);
+        BeginInvoke(LayoutDropZone);
     }
 
     private void WireEvents()
@@ -145,19 +182,44 @@ internal sealed class MainForm : Form
 
     private void LayoutDropZone()
     {
+        if (_dropZone.ClientSize.Width <= 0 || _dropZone.ClientSize.Height <= 0) return;
         int center = _dropZone.ClientSize.Width / 2;
-        int contentTop = Math.Max(18, (_dropZone.ClientSize.Height - 224) / 2);
-        _folderGlyph.Location = new Point(center - _folderGlyph.Width / 2, contentTop);
-        _dropTitle.SetBounds(24, contentTop + 70, Math.Max(80, _dropZone.ClientSize.Width - 48), 36);
-        _dropHint.SetBounds(36, contentTop + 108, Math.Max(80, _dropZone.ClientSize.Width - 72), 26);
-        _selectButton.Location = new Point(center - _selectButton.Width / 2, contentTop + 146);
-        _resetLink.Location = new Point(center - _resetLink.PreferredWidth / 2, contentTop + 191);
+        int titleHeight = Math.Max(_dropTitle.PreferredHeight + 4, 36);
+        int hintHeight = Math.Max(_dropHint.PreferredHeight + 2, 26);
+        int gapAfterGlyph = 10;
+        int gapAfterTitle = 2;
+        int gapBeforeButton = 10;
+        int gapBeforeReset = 8;
+        bool showSelectButton = !_finished;
+        bool showResetLink = _folders.Count > 0 && !_finished;
+        int totalHeight = _folderGlyph.Height + gapAfterGlyph + titleHeight + gapAfterTitle + hintHeight;
+        if (showSelectButton) totalHeight += gapBeforeButton + _selectButton.Height;
+        if (showResetLink) totalHeight += gapBeforeReset + _resetLink.PreferredHeight;
+
+        int y = Math.Max(4, (_dropZone.ClientSize.Height - totalHeight) / 2);
+        _folderGlyph.Location = new Point(center - _folderGlyph.Width / 2, y);
+        y = _folderGlyph.Bottom + gapAfterGlyph;
+        _dropTitle.SetBounds(24, y, Math.Max(80, _dropZone.ClientSize.Width - 48), titleHeight);
+        y = _dropTitle.Bottom + gapAfterTitle;
+        _dropHint.SetBounds(36, y, Math.Max(80, _dropZone.ClientSize.Width - 72), hintHeight);
+        y = _dropHint.Bottom;
+        if (showSelectButton)
+        {
+            y += gapBeforeButton;
+            _selectButton.Location = new Point(center - _selectButton.Width / 2, y);
+            y = _selectButton.Bottom;
+        }
+        if (showResetLink)
+        {
+            y += gapBeforeReset;
+            _resetLink.Location = new Point(center - _resetLink.PreferredWidth / 2, y);
+        }
     }
 
     private static void ConfigureSmallButton(ModernButton button, string text)
     {
         button.Text = text;
-        button.Size = new Size(142, 38);
+        button.Size = new Size(150, 48);
         button.Radius = 10;
         button.BackColor = Color.FromArgb(235, 241, 253);
         button.HoverColor = Color.FromArgb(221, 231, 250);
@@ -373,6 +435,8 @@ internal sealed class MainForm : Form
 
     internal bool ValidateUiContract(out string problem)
     {
+        PerformLayout();
+        LayoutDropZone();
         if (_dropZone.Controls.Cast<Control>().Any(control => !control.AllowDrop))
         {
             problem = "拖放区域存在不能接收文件夹的子控件";
@@ -388,9 +452,33 @@ internal sealed class MainForm : Form
             problem = "初始引导文字不正确";
             return false;
         }
+        if (_headerTitle.Parent == _headerSubtitle.Parent && _headerTitle.Bounds.IntersectsWith(_headerSubtitle.Bounds))
+        {
+            problem = "标题与副标题发生重叠";
+            return false;
+        }
+        if (_folderGlyph.Bounds.IntersectsWith(_dropTitle.Bounds) ||
+            _dropTitle.Bounds.IntersectsWith(_dropHint.Bounds) ||
+            (!_finished && (_selectButton.Top < _dropHint.Bottom || _selectButton.Bottom > _dropZone.ClientSize.Height ||
+                Math.Abs((_selectButton.Left + _selectButton.Width / 2) - _dropZone.ClientSize.Width / 2) > 2)))
+        {
+            problem = "拖放区文字或按钮发生重叠";
+            return false;
+        }
+        int buttonTextHeight = TextRenderer.MeasureText(_selectButton.Text, _selectButton.Font).Height;
+        if (_selectButton.ClientSize.Height < buttonTextHeight + Math.Max(4, DeviceDpi / 12))
+        {
+            problem = "选择按钮高度不足，文字可能被裁切";
+            return false;
+        }
         problem = string.Empty;
         return true;
     }
+
+    internal string GetLayoutDiagnostics() =>
+        $"DPI={DeviceDpi}; DropZone={_dropZone.ClientRectangle}; Glyph={_folderGlyph.Bounds}; " +
+        $"Title={_dropTitle.Bounds}; Hint={_dropHint.Bounds}; Select={_selectButton.Bounds}; " +
+        $"SelectVisible={_selectButton.Visible}; Finished={_finished}";
 }
 
 internal sealed class RoundedPanel : Panel
@@ -484,26 +572,48 @@ internal sealed class LogoBadge : Control
     }
 }
 
-internal sealed class ModernButton : Button
+internal sealed class ModernButton : Control
 {
     public int Radius { get; set; } = 10;
     public Color HoverColor { get; set; } = Color.Empty;
     private bool _hovered;
     public ModernButton()
     {
-        FlatStyle = FlatStyle.Flat; FlatAppearance.BorderSize = 0; Cursor = Cursors.Hand; UseVisualStyleBackColor = false;
-        SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
+        Cursor = Cursors.Hand;
+        TabStop = true;
+        AccessibleRole = AccessibleRole.PushButton;
+        SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer |
+                 ControlStyles.ResizeRedraw | ControlStyles.StandardClick | ControlStyles.Selectable, true);
     }
     protected override void OnMouseEnter(EventArgs e) { _hovered = true; Invalidate(); base.OnMouseEnter(e); }
     protected override void OnMouseLeave(EventArgs e) { _hovered = false; Invalidate(); base.OnMouseLeave(e); }
+    protected override void OnGotFocus(EventArgs e) { Invalidate(); base.OnGotFocus(e); }
+    protected override void OnLostFocus(EventArgs e) { Invalidate(); base.OnLostFocus(e); }
+    protected override bool IsInputKey(Keys keyData) => keyData is Keys.Space or Keys.Enter || base.IsInputKey(keyData);
+    protected override void OnKeyDown(KeyEventArgs e)
+    {
+        if (Enabled && e.KeyCode is Keys.Space or Keys.Enter)
+        {
+            OnClick(EventArgs.Empty);
+            e.Handled = true;
+        }
+        base.OnKeyDown(e);
+    }
     protected override void OnPaint(PaintEventArgs e)
     {
         e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+        e.Graphics.Clear(Parent?.BackColor ?? SystemColors.Control);
         Rectangle rect = ClientRectangle; rect.Inflate(-1, -1);
         using GraphicsPath path = UiDrawing.RoundedRect(rect, Radius);
         Color fill = !Enabled ? Color.FromArgb(207, 214, 226) : _hovered && HoverColor != Color.Empty ? HoverColor : BackColor;
         using var brush = new SolidBrush(fill); e.Graphics.FillPath(brush, path);
         TextRenderer.DrawText(e.Graphics, Text, Font, rect, Enabled ? ForeColor : Color.White, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
+        if (Focused && ShowFocusCues)
+        {
+            Rectangle focusRect = rect;
+            focusRect.Inflate(-4, -4);
+            ControlPaint.DrawFocusRectangle(e.Graphics, focusRect, ForeColor, fill);
+        }
     }
 }
 
